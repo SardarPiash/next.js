@@ -57,7 +57,6 @@ function UnapprovedList() {
           <ul>
             {unapprovedUsers.map((user, index) => (
               <li key={index}>
-                <p>ID: {user.id}</p>
                 <p>Name: {user.name}</p>
                 <p>Email: {user.email}</p>
                 <p>NID: {user.nid}</p>

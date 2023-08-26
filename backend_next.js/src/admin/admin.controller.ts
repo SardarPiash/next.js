@@ -88,19 +88,7 @@ export class AdminController {
       const response = await this.adminservice.customerList(show);
       return response;
   }
-
-  // see seller's list................
-  @Post('/seller_list')
-  async sellerList(@Session() session: Record<string, any>){
-    const show ="seller";
-    if(session.status==='admin'){
-      const response = await this.adminservice.sellerList(show);
-      return response;
-     }else{
-      return "You are not an Admin!!";
-     }
-  }
-
+  
   // see customer oderlist.........
   @Post('/show_order_list/:username')
    async orderList(@Param('username') name: string): Promise<any> {
@@ -108,44 +96,41 @@ export class AdminController {
       return user; 
    }
 
+  // see seller's list................
+  @Get('/seller_list')
+  async sellerList(){
+      const show ="seller";
+      const response = await this.adminservice.sellerList(show);
+      return response;
+  }
+
+  
+
    // search Product list by seller's name.........
-  @Get('/Product_list/:username')
-  async productList(@Param('username') name: string, @Session() session: Record<string, any>): Promise<any> {
-   if(session.status=="admin"){
+  @Post('/Product_list/:username')
+  async productList(@Param('username') name: string): Promise<any> {
      const user = await this.adminservice.productList(name);
      return user;
-   } else{
-     return "You are not an Admin";
-   }
     
   }
 
   //search user by username.........
-  @Get('/showregisterduser/:username')
-  async getUsers(@Param('username') name: string, @Session() session: Record<string, any>): Promise<any> {
-    if(session.status=="admin"){
+  @Post('/showregisterduser/:username')
+  async getUsers(@Param('username') name: string): Promise<any> {
       const user = await this.adminservice.getUsers(name);
-      session.username=user.name;
-      return user;
-    }else{
-      return "You are no an Admin!";
-    }
-    
+      return user; 
   }
 
 //************************Delete User */
-@Delete("/delete")
-  @UsePipes(new ValidationPipe())
-  async deleteUser(@Body() delete_dto:deleteuser_Dto,@Session() session: Record<string, any> ):Promise<any>{
-    if(session.status=="admin"){
-      return await this.adminservice.deleteUser(delete_dto);
-    }else{
-      return "You are not Admin!";
-    }
+@Delete("/delete/:name")
+//@UsePipes(new ValidationPipe())
+async deleteUser(@Param("name") name: string ): Promise<any> {
+  const result = await this.adminservice.deleteUser(name);
+  return result;
+}
 
-  }
 
-//**********************Delete User************ */
+//**********************Update profile************ */
 
 @Put('/update-profile/:name')
   @UsePipes(new ValidationPipe())
@@ -170,15 +155,10 @@ export class AdminController {
 
   //**************************Blocked user********** */
 
-@Get('/blocked_user/:username')
-  async blockeUser(@Param('username') name: string, @Session() session: Record<string, any>): Promise<any> {
-    if(session.status=="admin"){
+@Put('/blocked_user/:username')
+  async blockeUser(@Param('username') name: string): Promise<any> {
       const user = await this.adminservice.blockeUser(name);
       return user;
-    }else{
-      return "You are no an Admin!";
-    }
-    
   }
 
   @Post('logout')

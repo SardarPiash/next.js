@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import Sidebar from "../components/sidebar";
 import { useForm } from "react-hook-form";
-import axios from "axios"; // Import axios
-import { useRouter } from "next/router"; // Import useRouter
+import axios from "axios";
+import { useRouter } from "next/router";
 
 function ShowOrderList() {
   const { handleSubmit } = useForm();
   const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false); // Set initial loading state to false
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [orderList, setOrderList] = useState([]); // State for storing order list
-  const router = useRouter(); // Use useRouter to access router
+  const [orderList, setOrderList] = useState([]);
+  const router = useRouter();
 
   useEffect(() => {
     const userData = sessionStorage.getItem("user");
@@ -19,24 +19,26 @@ function ShowOrderList() {
       router.push('/User/login'); 
       return;
     }
-  }, [router]); // Include router in dependency array
+  }, [router]);
 
   const fetchData = async () => {
-    setError(""); // Clear previous error message
-    setLoading(true); // Set loading to true while fetching data
+    setError("");
+    setOrderList("");
+    setLoading(true);
     if (!name) {
       setError("Enter a customer name to see the order list!");
-      setLoading(false); // Set loading back to false
+      setLoading(false);
       return;
     }
 
     try {
       const response = await axios.post(`http://localhost:3001/admin/show_order_list/${name}`);
-      setOrderList(response.data); // Update order list
-      setLoading(false); // Set loading back to false
+      console.log(response.data);
+      setOrderList(response.data);
+      setLoading(false);
     } catch (error) {
-      setError(error.message); // Display error message
-      setLoading(false); // Set loading back to false
+      setError(error.message);
+      setLoading(false);
     }
   };
 
@@ -44,28 +46,32 @@ function ShowOrderList() {
     <>
       <Sidebar />
       <div>
+        <h1 style={{color:"red"}}>Search Order List By Customer Name</h1>
         <form onSubmit={handleSubmit(fetchData)}>
           <label htmlFor="name">Customer Name:</label>
-          <input name="name" value={name} onChange={(e) => setName(e.target.value)} /><br></br>
+          <input name="name" value={name} onChange={(e) => setName(e.target.value)} /><br />
           {error && <p style={{ color: "red" }}>{error}</p>}
           <button type="submit" disabled={loading}>
             {loading ? "Submitting..." : "Show Order"}
           </button>
         </form>
+        <hr></hr>
+        <h1 style={{color:"green"}}>Order List:</h1>
         <div>
-          {orderList.length > 0 && (
+          {orderList.length > 0 ? (
             <ul>
-              {orderList.map((customer, index) => (
+              {orderList.map((order, index) => (
                 <li key={index}>
-                  <p>Customer Name: {customer.orderId}</p>
-                  <p>Product Name: {customer.product_name}</p>
-                  <p>Seller Name: {customer.seller_name}</p>
+                  <p>Customer Name: {order.name}</p>
+                  <p>Product Name: {order.product_name}</p>
+                  <p>Seller Name: {order.seller_name}</p>
                   <hr />
                 </li>
               ))}
             </ul>
+          ) : (
+            <p>No orders founds......</p>
           )}
-          {orderList.length === 0 && !loading && <p>No orders found for {name}</p>}
         </div>
       </div>
     </>

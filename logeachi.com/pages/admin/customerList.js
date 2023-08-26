@@ -14,7 +14,7 @@ function customerList(){
         return;
      }
      fetchData();
-    },[]);
+    },[router]);
     const fetchData = async () =>{
         try{
             const response= await axios.get("http://localhost:3001/admin/customer_list");
@@ -45,13 +45,12 @@ function customerList(){
                 <p>NID: {user.nid}</p>
                 <p>status: {user.status}</p>
                 <p>Address: {user.address}</p>
-                <p>Approval: {user.approval}</p>
                 <hr></hr>
               </li>
             ))}
           </ul>
         ) : (
-          <p>No unapproved users found</p>
+          <p>No Customer found</p>
         )}
       </div>
         </>

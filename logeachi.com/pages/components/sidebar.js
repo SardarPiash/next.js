@@ -20,11 +20,6 @@ const Sidebar = () => {
           </Link>
         </li>
         <li className="mb-4">
-          <Link href="/admin/approvedNewMember">
-            <span className="block hover:text-gray-200">Approved New Member</span>
-          </Link>
-        </li>
-        <li className="mb-4">
           <Link href="/admin/customerList">
             <span className="block hover:text-gray-200">Customer List</span>
           </Link>

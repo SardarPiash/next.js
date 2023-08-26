@@ -65,9 +65,12 @@ export class AdminService{
 
       ///see unapproved member................
       async getUnapprovedUsers(): Promise<UserEntity[]> {
-        const unapprovedUsers = await this.userRepo.find({ where: { approval: "null" } });
+        const unapprovedUsers = await this.userRepo.find({
+          where: [{ approval: "null" }, { approval: "Blocked" }],
+        });
         return unapprovedUsers;
       }
+      
       //*************Approved new member************* */
       async approvedNewMember( name: string): Promise<string> {
         const regUser = await this.userRepo.findOne({ where: { name } });
@@ -96,32 +99,7 @@ export class AdminService{
       return users;
     }
 
-     ///******************show Seller List************* */
-     async sellerList(show:string):Promise<any>{
-      const users = await this.userRepo.find({ where: { status: show } });
-      if (users !== null) {
-        const sellers: UserEntity[] = [];
     
-        for (const user of users) {
-          if (user.approval !== null && user.approval !=="Blocked") {
-            const seller = new UserEntity();
-            seller.name = user.name;
-            seller.email = user.email;
-            seller.nid = user.nid;
-            // seller.phone = user.phone;
-            seller.address = user.address;
-            seller.status = user.status;
-    
-            sellers.push(seller);
-          }
-        }
-    
-        return sellers;
-      }
-    
-      return [];
-    
-    }
 
 //*************see customer order list............*/
 
@@ -134,60 +112,62 @@ async orderList(name: string): Promise<any> {
 
 }
 
-//*************search customer order list............*/
+ ///******************show Seller List************* */
+ async sellerList(show:string):Promise<any>{
+  const users = await this.userRepo.find({ where: { status: show } });
+  if (users !== null) {
+    return users;
+  }
+
+  return ("No Seller Found");
+
+}
+
+//*************show product list............*/
 
 async productList(name: string): Promise<any> {
   const productList = await this.sellerRepo.find({ where: { name: name } });
-  const products: SellerEntity[] = [];
-    
-  for (const productsinfo of productList) {
-    
-    const product = new SellerEntity();
-    product.product_id=productsinfo.product_id;
-    product.name = productsinfo.name;
-    product.product_name = productsinfo.product_name;
-    product.product_description = productsinfo.product_description;
-    product.price = productsinfo.price;
+  if (!productList) {
+    return ("No Seller Found");
+  }
 
-    products.push(product); 
-}
-return products;
+  return productList;
 
 }
 
-///search user by session.....
+///search user by name.....
 async getUsers(name: string): Promise<any> {
   const user = await this.userRepo.findOne({ where: { name: name } });
 
   if (user) {
     if(user.status==="seller" || user.status==="customer"){
-
-    const newUser = new UserEntity();
-      newUser.name = user.name;
-      newUser.email = user.email;
-      newUser.nid = user.nid;
-      // newUser.phone = user.phone;
-      newUser.address = user.address;
-      return newUser;
-    }else{
-      return "User not found!";
+      // const { password, ...userWithoutPassword } = user;
+      // return userWithoutPassword;
+      return user;
     }
   } else {
-    return "User not Found";
+    return ("User not Found");
   }
 }
 
     //delete user............
-    async deleteUser(delete_dtoo: deleteuser_Dto): Promise<any> {
-      const user = await this.userRepo.findOne({ where: { name: delete_dtoo.name } });
+    async deleteUser(name: string): Promise<string> {
+      const user = await this.userRepo.findOne({ where: { name } });
     
-      if (!user) {
-        return 'User not exists!';
+      if (user) {
+        try {
+          await this.userRepo.remove(user);
+          return "User deleted successfully";
+        } catch (error) {
+          // Handle error if the removal process fails
+          return "User could not be deleted";
+        }
       } else {
-        await this.userRepo.delete({ name: delete_dtoo.name });
-        return 'User deleted successfully!';
+        return "User not found";
       }
     }
+    
+    
 
       //update user profile by admin.....
       async updateProfile(updateProfileDto: any, name: string): Promise<string> {
@@ -220,9 +200,8 @@ async getUsers(name: string): Promise<any> {
     
       if (!user) {
         return 'User not exists!';
-      } else if(user.status!=="admin") {
-        user.approval = "Blocked";
-    
+      }
+        user.approval="Blocked";
         try {
           await this.userRepo.createQueryBuilder()
             .update(UserEntity)
@@ -230,14 +209,11 @@ async getUsers(name: string): Promise<any> {
             .where('name = :name', { name })
             .execute();
     
-          return 'User Blocked!';
+          return 'User_Blocked!';
         
       }catch(error){
         return "User Not Blocked!";
       }
-    }else{
-      return "Admin Blocked is not possible!";
-    }
 }
 
 // async changePassword(changePassword_Dto: changePassword_Dto, name: string): Promise<string> {
