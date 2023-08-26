@@ -21,9 +21,6 @@ import {Entity,Column,PrimaryGeneratedColumn} from 'typeorm';
 		nid:string;
 
 		@Column()
-		phone:string;
-
-		@Column()
 		address:string;
 
 		@Column()

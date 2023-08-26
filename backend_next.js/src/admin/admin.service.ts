@@ -27,12 +27,12 @@ export class AdminService{
         Repository<SellerEntity>){}
         
         //registration user....
-        async registrationuser(registration_dtoo: registration_Dto): Promise<any> {
+        async registrationuser(registration_dtoo: any) {
           const User = await this.userRepo.findOne({ where: { name: registration_dtoo.name } });
       
           if (User) {
             
-            return 'User exists!';
+            return 'User exist';
           } else {
 
             const newUser = new UserEntity();
@@ -40,9 +40,10 @@ export class AdminService{
             newUser.password = registration_dtoo.password; 
             newUser.email = registration_dtoo.email;
             newUser.nid = registration_dtoo.nid;
-            newUser.phone = registration_dtoo.phone;
+            // newUser.phone = registration_dtoo.phone;
             newUser.address = registration_dtoo.address;
             newUser.status = registration_dtoo.status;
+            newUser.approval = "null";
 
             const hashedPassword = await bcrypt.hash(registration_dtoo.password, 10);
             newUser.password = hashedPassword;
@@ -64,54 +65,27 @@ export class AdminService{
 
       ///see unapproved member................
       async getUnapprovedUsers(): Promise<UserEntity[]> {
-        const users = await this.userRepo.find({ where: { approval: null } });
-
-        if (users !== null) {
-          const customers: UserEntity[] = [];
-      
-          for (const user of users) {
-            if (user.approval === null || user.approval =="Blocked") {
-              const customer = new UserEntity();
-              customer.name = user.name;
-              customer.email = user.email;
-              customer.nid = user.nid;
-              customer.phone = user.phone;
-              customer.address = user.address;
-              customer.status = user.status;
-              customer.approval=user.approval;
-      
-              customers.push(customer);
-            }
-          }
-      
-          return customers;
-        }
-      
-        return [];
-        
-        //return unapprovedUsers;
+        const unapprovedUsers = await this.userRepo.find({ where: { approval: "null" } });
+        return unapprovedUsers;
       }
-    
-
-
       //*************Approved new member************* */
-      async approvedNewMember(approved_Dto: approve_Dto, name: string): Promise<string> {
+      async approvedNewMember( name: string): Promise<string> {
         const regUser = await this.userRepo.findOne({ where: { name } });
     
         if (!regUser) {
-          throw new NotFoundException('User not found in the database.');
+          return ('User_not_found');
         }
     
-        regUser.approval = approved_Dto.approved;
+        regUser.approval = "approved";
     
         try {
           await this.userRepo.createQueryBuilder()
             .update(UserEntity)
-            .set({ approval: approved_Dto.approved })
+            .set({ approval: regUser.approval })
             .where('name = :name', { name })
             .execute();
     
-          return 'User Approved Successfully!';
+          return ('Approved_success');
         }catch (error) {
           throw new Error('User Not Found.');
         }
@@ -119,28 +93,7 @@ export class AdminService{
     ///******************show customer List************* */
     async customerList(show:string):Promise<any>{
       const users = await this.userRepo.find({ where: { status: show } });
-      if (users !== null) {
-        const customers: UserEntity[] = [];
-    
-        for (const user of users) {
-          if (user.approval !== null && user.approval !=="Blocked") {
-            const customer = new UserEntity();
-            customer.name = user.name;
-            customer.email = user.email;
-            customer.nid = user.nid;
-            customer.phone = user.phone;
-            customer.address = user.address;
-            customer.status = user.status;
-    
-            customers.push(customer);
-          }
-        }
-    
-        return customers;
-      }
-    
-      return [];
-    
+      return users;
     }
 
      ///******************show Seller List************* */
@@ -155,7 +108,7 @@ export class AdminService{
             seller.name = user.name;
             seller.email = user.email;
             seller.nid = user.nid;
-            seller.phone = user.phone;
+            // seller.phone = user.phone;
             seller.address = user.address;
             seller.status = user.status;
     
@@ -174,18 +127,10 @@ export class AdminService{
 
 async orderList(name: string): Promise<any> {
   const orderList = await this.customerRepo.find({ where: { name: name } });
-  const orders: CustomerEntity[] = [];
-    
-  for (const orderinfo of orderList) {
-    
-    const order = new CustomerEntity();
-    order.name = orderinfo.name;
-    order.product_name = orderinfo.product_name;
-    order.seller_name = orderinfo.seller_name;
-
-    orders.push(order); 
-}
-return orders;
+  if(!orderList){
+     return ("Customer has no oder list");
+  }
+  return orderList;
 
 }
 
@@ -221,7 +166,7 @@ async getUsers(name: string): Promise<any> {
       newUser.name = user.name;
       newUser.email = user.email;
       newUser.nid = user.nid;
-      newUser.phone = user.phone;
+      // newUser.phone = user.phone;
       newUser.address = user.address;
       return newUser;
     }else{
@@ -245,34 +190,29 @@ async getUsers(name: string): Promise<any> {
     }
 
       //update user profile by admin.....
-      async updateProfile(updateProfileDto: registration_Dto, name: string): Promise<string> {
+      async updateProfile(updateProfileDto: any, name: string): Promise<string> {
         const regUser = await this.userRepo.findOne({ where: { name } });
-    
+      
         if (!regUser) {
-          throw new NotFoundException('User not found in the database.');
+          return 'user_not_found';
         }
-        else if(updateProfileDto.status===regUser.status){
-        regUser.name = regUser.name;
-        regUser.password = updateProfileDto.password;
-        regUser.email = updateProfileDto.email;
-        regUser.nid = updateProfileDto.nid;
-        regUser.phone = updateProfileDto.phone;
-        regUser.address = updateProfileDto.address;
-        regUser.status=regUser.status;
-    
-        try {
-          
-            const up = await this.userRepo.update({ name }, regUser);
-            return "User Update successfully!";
-          
-          
-        } catch (error) {
-          throw new Error('User Not Found.');
+      
+        if (updateProfileDto.name === regUser.name) {
+          const hashedPassword = await bcrypt.hash(updateProfileDto.password, 10);
+          regUser.name = updateProfileDto.name;
+          regUser.email = updateProfileDto.email;
+          regUser.nid = updateProfileDto.nid;
+          regUser.address = updateProfileDto.address;
+          regUser.status = updateProfileDto.status;
+          regUser.password = hashedPassword; // Set the hashed password
+          await this.userRepo.update({ name }, regUser);
+          return 'update_success';
+        } else {
+          return 'username_not_matched';
         }
-      }else{
-        return "Name & Status Can not be changed!";
       }
-    }
+      
+      
 
     //*********************Blocked User************* */
     async blockeUser(name: string): Promise<any> {

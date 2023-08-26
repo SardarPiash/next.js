@@ -1,5 +1,4 @@
 import axios from "axios";
-import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from 'next/router';
 import { useState } from "react";
@@ -49,17 +48,16 @@ export default function Login() {
         console.log(user);
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('name', name); 
-        router.push('profile');
+        router.push('/admin/profile');
       }
       else if (response.data.message === "Invalid name or password") {
         setApiError("Invalid name or password");
       }
       else if (response.data.message === "User not found") {
-        setApiError("User not found"); // Set the error message here
+        setApiError("User not found"); 
       }
 
     } catch (error) {
-      // Handle error
       console.error(error);
       setLoading(false);
       setApiError("Something went wrong.");
@@ -94,7 +92,7 @@ export default function Login() {
         </button>
       </form>
       <p>
-        Don't have an account? <Link href="/signup">Sign Up</Link>
+        Don't have an account? <Link href="/User/registration">Sign Up</Link>
       </p>
     </div>
   );

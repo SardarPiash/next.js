@@ -8,6 +8,10 @@ export default function Homepage() {
         <a href="registration">
           registration</a>
       </h2>
+      <h2>
+        <a href="login">
+          login</a>
+      </h2>
     </div>
   );
 }

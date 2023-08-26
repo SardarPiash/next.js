@@ -16,12 +16,26 @@ export class AdminController {
 
   //*********Registration_request***************************** */
 	@Post('/registration')
-	@UsePipes(new ValidationPipe())
-	async registrationuser(@Body() registration_dto:registration_Dto ):Promise<any>{
-		
-		return	await this.adminservice.registrationuser(registration_dto);
-    
-	}
+  @UsePipes(new ValidationPipe())
+  async registrationuser(
+    @Body() registrationdto: {
+      name: string;
+      password: string;
+      email: string;
+      nid: number;
+      // phone: string;
+      address: string;
+      status: string;
+    }
+  ) {
+    const user= await this.adminservice.registrationuser(registrationdto);
+    if(user==="User exist"){
+      return { message: 'user exist' };
+    }else if(user==="User added Successfull"){
+      return { message: 'Success'};
+    }
+  }
+
 
   //*********Log_in******************************************** */
   @Post('login')
@@ -29,7 +43,7 @@ export class AdminController {
     const user = await this.adminservice.login(loginData.name);
 
     if (!user) {
-      return { message: 'User not found' }; // Return a meaningful response
+      return { message: 'User not found' }; 
     }
 
     const isPasswordValid = await bcrypt.compare(loginData.password, user.password);
@@ -51,42 +65,28 @@ export class AdminController {
 
   //see approve request ..............
   @Get('/unapproved')
-  async getUnapprovedUsers(@Session() session: Record<string, any>): Promise<any> {
-    if(session.status =="admin"){
-    return this.adminservice.getUnapprovedUsers();
-  }else{
-    return "Loged as an Admin";
+  async getUnapprovedUsers() {
+    const unapprovedUsers = await this.adminservice.getUnapprovedUsers();
+    return unapprovedUsers;
   }
-}
+
 
 ///Approved new member................
 
 @Put('/aproved_new_member/:name')
   @UsePipes(new ValidationPipe())
-  async approvedNewMember(@Body() approved_dto: approve_Dto, @Param('name') name: string,@Session() session: Record<string, any>): Promise<string> {
-    try {
-      const status= session.status;
-       if(session.status==='admin'){
-        const response = await this.adminservice.approvedNewMember(approved_dto, name);
+  async approvedNewMember( @Param('name') name: string) {
+  
+        const response = await this.adminservice.approvedNewMember(name);
         return response;
-       }else{
-        return "You are not an Admin!!";
-       }
-    } catch (error) {
-      return 'Error occurred while updating user.';
-    }
   }
 
   // see customer's list................
-  @Post('/customer_list')
-  async customerList(@Session() session: Record<string, any>){
+  @Get('/customer_list')
+  async customerList(){
     const show ="customer";
-    if(session.status==='admin'){
       const response = await this.adminservice.customerList(show);
       return response;
-     }else{
-      return "You are not an Admin!!";
-     }
   }
 
   // see seller's list................
@@ -102,15 +102,10 @@ export class AdminController {
   }
 
   // see customer oderlist.........
-  @Get('/show_order_list/:username')
-   async orderList(@Param('username') name: string, @Session() session: Record<string, any>): Promise<any> {
-    if(session.status=="admin"){
+  @Post('/show_order_list/:username')
+   async orderList(@Param('username') name: string): Promise<any> {
       const user = await this.adminservice.orderList(name);
-      return user;
-    } else{
-      return "You are not an Admin";
-    }
-     
+      return user; 
    }
 
    // search Product list by seller's name.........
@@ -154,14 +149,24 @@ export class AdminController {
 
 @Put('/update-profile/:name')
   @UsePipes(new ValidationPipe())
-  async updateProfile(@Body() updateProfileDto: registration_Dto, @Param('name') name: string,@Session() session: Record<string, any> ): Promise<string> {
-    if(session.status=="admin"){
-      const response = await this.adminservice.updateProfile(updateProfileDto, name);
-      return response;
-    } else{
-      return "You are not Admin!";
+  async updateProfile(@Body() updateProfileDto: {
+    name: string;
+    password: string;
+    email: string;
+    nid: number;
+    address: string;
+    status: string;
+  } ,@Param('name') name: string): Promise <any> {
+    const response = await this.adminservice.updateProfile(updateProfileDto, name);
+    if (response === 'update_success') {
+      return { message: 'update_success' };
+    } else if (response === 'username_not_matched') {
+      return { message: "username_not_matched" };
+    }else if(!response){
+      return {message :"not_update"};
     }
   }
+  
 
   //**************************Blocked user********** */
 
