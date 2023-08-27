@@ -109,49 +109,74 @@ function updateUserProfile(){
     return (
         <>
         <Sidebar />
-        <div>
-    <h1 align="Center">Update Your Profile</h1>
-    <br></br>
-    <form onSubmit={handleSubmit(onSubmit)}>
-        <div align="center">
-            <label for="name">UserName:</label>
-            <input type="text" id="name" value={name} onChange={(e)=>setName(e.target.value)} />
-            {nameError && <p style={{color:'red'}}>{nameError}</p>}
-            <br></br>
-            <label for="password">Password:</label>
-            <input type="text" id="password" value={password} onChange={(e)=>setPassword(e.target.value)} />
-            {passwordError && <p style={{color:'red'}}>{passwordError}</p>}
-            <br></br>
-            <label for="email">Email:</label>
-            <input type="email" id="email" value={email} onChange={(e)=>setEmail(e.target.value)} />
-            {emailError && <p style={{color:'red'}}>{emailError}</p>}
-            <br></br>
-            <label for="nid">NID:</label>
-            <input type="number" id="nid" value={nid} onChange={(e)=>setNID(e.target.value)} />
-            {nidError && <p style={{color:'red'}}>{nidError}</p>}
-            <br></br>
-            {/* <label>Phone Number:</label>
-            <input type="number" value={phone} onChange={(e)=>setPhoneNumber(e.target.value)} />
-            {phoneNumberError && <p style={{color:'red'}}>{phoneNumberError}</p>}
-            <br></br> */}
-            <label for="address">Address:</label>
-            <input type="text" id="address" value={address} onChange={(e)=>setAddress(e.target.value)} />
-            {addressError && <p style={{color:'red'}}>{addressError}</p>}
-            <br></br>
-            <label for="status">Status:</label>
-            <input type="radio" id="status" value="admin" onChange={(e)=>setStatus(e.target.value)} />Admin
-            <input type="radio" id="status" value="seller" onChange={(e)=>setStatus(e.target.value)} />seller
-            <input type="radio" id="status" value="customer" onChange={(e)=>setStatus(e.target.value)} />Customer
-            {statusError && <p style={{color:'red'}}>{statusError}</p>}
-            <br></br>
-            {userError && <p style={{ color: 'red' }}>{userError}</p>}
-            <button type="submit" disabled={loading}>
-            {loading ? "Updating..." : "Update Profile"}
-            </button>
-        </div>
-    </form>
- </div>
-        </>
+        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
+<div className="mx-auto w-full max-w-md p-6  dark:bg-gray-900 rounded shadow-md">
+  <h1 className="text-2xl font-bold text-center text-white">Update Your Profile</h1>
+  <br />
+
+  <form onSubmit={handleSubmit(onSubmit)} className="text-center">
+    <div className="mb-4">
+      <label htmlFor="name" className="block text-white">UserName:</label>
+      <input type="text" id="name" className="w-full border rounded py-1 px-2" value={name} onChange={(e) => setName(e.target.value)} />
+      {nameError && <p className="text-red-500">{nameError}</p>}
+    </div>
+
+    <div className="mb-4">
+      <label htmlFor="password" className="block text-white">Password:</label>
+      <input type="password" id="password" className="w-full border rounded py-1 px-2" value={password} onChange={(e) => setPassword(e.target.value)} />
+      {passwordError && <p className="text-red-500">{passwordError}</p>}
+    </div>
+
+    <div className="mb-4">
+      <label htmlFor="email" className="block text-white">Email:</label>
+      <input type="email" id="email" className="w-full border rounded py-1 px-2" value={email} onChange={(e) => setEmail(e.target.value)} />
+      {emailError && <p className="text-red-500">{emailError}</p>}
+    </div>
+
+    <div className="mb-4">
+      <label htmlFor="nid" className="block text-white">NID:</label>
+      <input type="number" id="nid" className="w-full border rounded py-1 px-2" value={nid} onChange={(e) => setNID(e.target.value)} />
+      {nidError && <p className="text-red-500">{nidError}</p>}
+    </div>
+
+    <div className="mb-4">
+      <label htmlFor="address" className="block text-white">Address:</label>
+      <input type="text" id="address" className="w-full border rounded py-1 px-2" value={address} onChange={(e) => setAddress(e.target.value)} />
+      {addressError && <p className="text-red-500">{addressError}</p>}
+    </div>
+
+    <div className="mb-4">
+      <label htmlFor="status" className="block text-white">Status:</label>
+      <div>
+        <label className="mr-2 text-white">
+          <input type="radio" id="status" value="admin" className="mr-1" onChange={(e) => setStatus(e.target.value)} />
+          Admin
+        </label>
+        <label className="mr-2 text-white">
+          <input type="radio" id="status" value="seller" className="mr-1" onChange={(e) => setStatus(e.target.value)} />
+          Seller
+        </label >
+        <label className="mr-2 text-white">
+          <input type="radio" id="status" value="customer" className="mr-1" onChange={(e) => setStatus(e.target.value)} />
+          Customer
+        </label>
+      </div>
+      {statusError && <p className="text-red-500">{statusError}</p>}
+    </div>
+
+    {userError && <p className="text-red-500">{userError}</p>}
+
+    <button
+      type="submit"
+      disabled={loading}
+      className="bg-blue-500 text-white py-2 px-4 rounded"
+    >
+      {loading ? "Updating..." : "Update Profile"}
+    </button>
+  </form>
+</div>
+</div>
+</>
 
     );
 }

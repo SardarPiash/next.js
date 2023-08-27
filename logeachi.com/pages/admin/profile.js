@@ -18,7 +18,6 @@ function ProfilePage() {
     try {
       const info = JSON.parse(userData);
       const userName = info.name;
-      console.log(userName);
       
       const fetchData = async () => {
         try {
@@ -36,30 +35,25 @@ function ProfilePage() {
   }, [router]);
 
   return (
-    <>
+    <div className="flex bg-gray-100 min-h-screen">
       <Sidebar />
-      <div align="center">
-        <h1>User Dashboard</h1>
-        {user ? (
-          <>
-            <p>
-              <span>Name:</span> {user.name}
-            </p>
-            <p>
-              <span>Email:</span> {user.email}
-            </p>
-            <p>
-              <span>NID:</span> {user.nid}
-            </p>
-            <p>
-              <span>Address:</span> {user.address}
-            </p>
-          </>
-        ) : (
-          <p>Something went wrong</p>
-        )}
+
+      <div className="flex-grow p-8 flex justify-center items-center">
+        <div className="w-full md:w-1/2 h-1/2 bg-white p-6 rounded shadow-md">
+          <h1 className="text-2xl font-bold mb-4 text-center">User Dashboard</h1>
+          {user ? (
+            <div className="text-left" align="center">
+              <p><span className="font-semibold">Name:</span> {user.name}</p>
+              <p><span className="font-semibold">Email:</span> {user.email}</p>
+              <p><span className="font-semibold">NID:</span> {user.nid}</p>
+              <p><span className="font-semibold">Address:</span> {user.address}</p>
+            </div>
+          ) : (
+            <p className="text-red-500">Something went wrong</p>
+          )}
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 

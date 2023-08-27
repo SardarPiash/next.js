@@ -46,31 +46,33 @@ function UnapprovedList() {
   return (
     <>
       <Sidebar />
-      <div>
-        {approved && <p style={{color:"red"}}>{approved}</p>}
-        <h1>Unapproved User List</h1>
-        {loading ? (
-          <p>Loading...</p>
-        ) : error ? (
-          <p>Error: {error.message}</p>
-        ) : unapprovedUsers.length > 0 ? (
-          <ul>
-            {unapprovedUsers.map((user, index) => (
-              <li key={index}>
-                <p>Name: {user.name}</p>
-                <p>Email: {user.email}</p>
-                <p>NID: {user.nid}</p>
-                <p>Status: {user.status}</p>
-                <p>Address: {user.address}</p>
-                <p>Approval: {user.approval}</p>
-                <button onClick={() => handleApproveClick(user.name)}>Approve</button>
-                <hr />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No unapproved users found</p>
-        )}
+        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+          <div className="text-center mt-8 bg-white p-6 rounded shadow-md">
+            {approved && <p className="text-red-500">{approved}</p>}
+            <h1 className="text-2xl font-bold mb-4">Unapproved User List</h1>
+            {loading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p className="text-red-500">Error: {error.message}</p>
+            ) : unapprovedUsers.length > 0 ? (
+              <ul className="list-disc list-inside">
+                {unapprovedUsers.map((user, index) => (
+                  <li key={index} className="mb-4 border p-4 rounded shadow">
+                    <p><strong>Name:</strong> {user.name}</p>
+                    <p><strong>Email:</strong> {user.email}</p>
+                    <p><strong>NID:</strong> {user.nid}</p>
+                    <p><strong>Status:</strong> {user.status}</p>
+                    <p><strong>Address:</strong> {user.address}</p>
+                    <p><strong>Approval:</strong> {user.approval}</p>
+                    <button className="bg-green-500 text-white px-3 py-1 rounded mt-2" onClick={() => handleApproveClick(user.name)}>Approve</button>
+                    <hr className="my-4" />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="italic">No unapproved users found</p>
+            )}
+          </div>
       </div>
     </>
   );
