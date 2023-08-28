@@ -3,6 +3,7 @@ import Sidebar from "../components/sidebar";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Footer from "../components/footer";
+import Header from "../components/header";
 
 function SellerList() {
   const [loading, setLoading] = useState(true);
@@ -36,6 +37,7 @@ function SellerList() {
 
   return (
     <>
+    <Header/>
       <Sidebar />
       <div className="flex justify-center items-center h-full">
         <div className="w-full max-w-md px-4 py-8 bg-white rounded-lg shadow-md">
@@ -62,6 +64,7 @@ function SellerList() {
           )}
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

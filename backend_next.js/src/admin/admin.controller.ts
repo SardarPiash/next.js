@@ -49,7 +49,6 @@ export class AdminController {
     const isPasswordValid = await bcrypt.compare(loginData.password, user.password);
 
     if (isPasswordValid) {
-      // Generate and return a JWT token or perform login actions here
       return { message: 'Login successful' };
     } else {
       throw new Error('Invalid name or password');

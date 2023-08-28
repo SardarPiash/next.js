@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/sidebar";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 function UnapprovedList() {
   const [unapprovedUsers, setUnapprovedUsers] = useState([]);
@@ -45,6 +47,7 @@ function UnapprovedList() {
 
   return (
     <>
+    <Header/>
       <Sidebar />
         <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
           <div className="text-center mt-8 bg-white p-6 rounded shadow-md">
@@ -74,6 +77,7 @@ function UnapprovedList() {
             )}
           </div>
       </div>
+      <Footer/>
     </>
   );
 }

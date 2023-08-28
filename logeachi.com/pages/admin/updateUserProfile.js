@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import Footer from "../components/footer";
+import Header from "../components/header";
 function updateUserProfile(){
     const [name, setName] = useState('');
     const [password, setPassword] = useState('');
@@ -73,7 +75,7 @@ function updateUserProfile(){
          if(userData){
             const parseUserData = JSON.parse(userData);
             const status1 =parseUserData.status;
-            if(parseUserData.name === name){
+            if(parseUserData.name === name && parseUserData.status === status){
                 try {
                     const response = await axios.put(`http://localhost:3001/admin/update-profile/${name}`, {
                       name,  
@@ -97,7 +99,7 @@ function updateUserProfile(){
                     setUsererror("Something went wrong.");
                 }
             }else{
-                setUsererror('UserName Can Not be Changed');
+                setUsererror('UserName & Status Can Not be Changed');
                 setLoading(false);
                 return;
             }
@@ -108,6 +110,7 @@ function updateUserProfile(){
 
     return (
         <>
+        <Header/>
         <Sidebar />
         <div className="bg-gray-100 min-h-screen flex justify-center items-center">
 <div className="mx-auto w-full max-w-md p-6  dark:bg-gray-900 rounded shadow-md">
@@ -176,6 +179,7 @@ function updateUserProfile(){
   </form>
 </div>
 </div>
+<Footer/>
 </>
 
     );

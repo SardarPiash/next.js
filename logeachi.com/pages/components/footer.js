@@ -1,29 +1,71 @@
-import React from 'react';
 import Link from 'next/link';
 
 const Footer = () => {
   return (
-    <footer className="bg-white rounded-lg shadow dark:bg-gray-900 m-4">
-      <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8">
-        <div className="sm:flex sm:items-center sm:justify-between">
-          <a href="https://flowbite.com/" className="flex items-center mb-4 sm:mb-0">
-            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 mr-3" alt="Flowbite Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-          </a>
-          <nav className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
-          <a href="#" className="mr-4 hover:underline md:mr-6">
-  <Link href="#">About</Link>
-</a>
-
-
-          </nav>
+    <div className="relative bg-gray-800">
+      <div className="relative container mx-auto px-4 py-8 lg:py-16">
+        <div className="flex flex-wrap justify-between items-center">
+          <div className="w-full md:w-1/2 lg:w-1/4 mb-8 lg:mb-0">
+            <h2 className="text-xl font-semibold text-white mb-4">Contact Us</h2>
+            <p className="text-gray-400 leading-6">
+              3/9, Tajmohol Road<br />
+              support@example.com<br />
+              (123) 456-7890
+            </p>
+          </div>
+          <div className="w-full md:w-1/2 lg:w-1/4 mb-8 lg:mb-0">
+            <h2 className="text-xl font-semibold text-white mb-4">Useful Links</h2>
+            <ul className="list-none">
+              <li className="mb-2">
+                <Link href="#">
+                  <span className="text-gray-400 hover:text-white">About Us</span>
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link href="#">
+                  <span className="text-gray-400 hover:text-white">Our Services</span>
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link href="#">
+                  <span className="text-gray-400 hover:text-white">Blog</span>
+                </Link>
+              </li>
+              <li className="mb-2">
+                <Link href="#">
+                  <span className="text-gray-400 hover:text-white">Contact Us</span>
+                </Link>
+              </li>
+            </ul>
+          </div>
+          <div className="w-full md:w-1/2 lg:w-1/4 mb-8 lg:mb-0">
+            <h2 className="text-xl font-semibold text-white mb-4">Social Media</h2>
+            <ul className="list-none">
+              <li className="mb-2">
+                <span href="#" className="text-gray-400 hover:text-white">
+                  <i className="fab fa-facebook-f mr-2"></i> Facebook
+                </span>
+              </li>
+              <li className="mb-2">
+                <span href="#" className="text-gray-400 hover:text-white">
+                  <i className="fab fa-twitter mr-2"></i> Twitter
+                </span>
+              </li>
+              <li className="mb-2">
+                <span href="#" className="text-gray-400 hover:text-white">
+                  <i className="fab fa-instagram mr-2"></i> Instagram
+                </span>
+              </li>
+            </ul>
+          </div>
         </div>
-        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
-          © 2023 <a href="https://flowbite.com/" className="hover:underline">Flowbite™</a>. All Rights Reserved.
-        </span>
+        <div className="mt-8 lg:mt-16">
+          <p className="text-gray-400 text-center">
+            &copy; 2023 Quick fix. All rights reserved.
+          </p>
+        </div>
       </div>
-    </footer>
+    </div>
   );
 };
 

@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
+import Footer from "../components/footer";
+import Header from "../components/header";
+import { useEffect } from "react";
 
 export default function Login() {
   const [name, setName] = useState('');
@@ -15,12 +18,16 @@ export default function Login() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { handleSubmit } = useForm();
+  const [sessionStatus, setSessionStatus] = useState(false);
+  const[sessionMsg,setSession_msg]=useState("");
+
 
   const onSubmit = async () => {
     setLoading(true);
     setNameError('');
     setPasswordError('');
     setApiError('');
+    setSession_msg('');
 
     if (!name) {
       setNameError('Please fill in the username.');
@@ -43,10 +50,21 @@ export default function Login() {
       console.log(response.data);
       setLoading(false);
       if (response.data.message === "Login successful") {
-        console.log(name);
+        // console.log(name);
         const res = await axios.get(`http://localhost:3001/admin/seeuserprofile/${name}`);
         const user = res.data;
-        console.log(user);
+        
+        if(user.status !=="admin"){
+          setSession_msg("You are not an Admin");
+          setSessionStatus(false);
+          return;
+        }
+      if(user.approval != "approved"){
+        setSession_msg("You are not an Approved Member!");
+        setSessionStatus(false);
+        return;
+      }
+        //console.log(user);
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('name', name); 
         router.push('/admin/profile');
@@ -67,15 +85,13 @@ export default function Login() {
 
   return (
     <> 
+    <Header/>
     <section className="bg-gray-200 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <a href="/" className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-          <img className="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo"></img>
-          Logeachi.Com   
-        </a>
+        
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            <h1 align="center" className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Log in to your account
             </h1>
             <div align="center">
@@ -103,6 +119,7 @@ export default function Login() {
                   {loading ? "Logging in..." : "Login"}
                 </button>
               </form>
+              {sessionMsg && <p style={{ color: 'red' }}>{sessionMsg}</p>}
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don't have an account? <Link href="/User/registration" className="font-medium text-primary-600 hover:underline dark:text-primary-500">Sign Up</Link>
               </p>
@@ -111,6 +128,7 @@ export default function Login() {
         </div>
       </div>
     </section>
+    <Footer/>
     </>
   );
 }

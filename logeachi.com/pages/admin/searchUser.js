@@ -3,6 +3,8 @@ import Sidebar from "../components/sidebar";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 function SearchUser() {
     const { handleSubmit } = useForm();
@@ -47,6 +49,7 @@ function SearchUser() {
 
     return (
         <>
+        <Header/>
             <Sidebar />
             <div className="max-w-md mx-auto mt-10 px-4 py-8 bg-white rounded-lg shadow-md">
                 <h1 className="text-red-500 text-2xl font-bold mb-4">Search a User by Name</h1>
@@ -88,6 +91,7 @@ function SearchUser() {
                     )}
                 </div>
             </div>
+            <Footer/>
         </>
     );
 }

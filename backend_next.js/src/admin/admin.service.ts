@@ -141,9 +141,8 @@ async getUsers(name: string): Promise<any> {
 
   if (user) {
     if(user.status==="seller" || user.status==="customer"){
-      // const { password, ...userWithoutPassword } = user;
-      // return userWithoutPassword;
-      return user;
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword;
     }
   } else {
     return ("User not Found");
@@ -159,7 +158,6 @@ async getUsers(name: string): Promise<any> {
           await this.userRepo.remove(user);
           return "User deleted successfully";
         } catch (error) {
-          // Handle error if the removal process fails
           return "User could not be deleted";
         }
       } else {

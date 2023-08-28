@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
 import Sidebar from "../components/sidebar";
 import axios from "axios";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 function ProfilePage() {
   const [user, setUser] = useState(null);
@@ -14,27 +16,30 @@ function ProfilePage() {
       router.push('/User/login'); 
       return;
     }
+      try {
+        const info = JSON.parse(userData);
+        const userName = info.name;
+        
+        const fetchData = async () => {
+          try {
+            const response = await axios.get(`http://localhost:3001/admin/seeuserprofile/${userName}`);
+            setUser(response.data);
+          } catch (error) {
+            console.error("Error fetching user profile:", error);
+          }
+        };
+  
+        fetchData();
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
 
-    try {
-      const info = JSON.parse(userData);
-      const userName = info.name;
-      
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(`http://localhost:3001/admin/seeuserprofile/${userName}`);
-          setUser(response.data);
-        } catch (error) {
-          console.error("Error fetching user profile:", error);
-        }
-      };
-
-      fetchData();
-    } catch (error) {
-      console.error("Error parsing user data:", error);
-    }
+    
   }, [router]);
 
   return (
+    <>
+    <Header/>
     <div className="flex bg-gray-100 min-h-screen">
       <Sidebar />
 
@@ -53,7 +58,11 @@ function ProfilePage() {
           )}
         </div>
       </div>
+      
     </div>
+    <Footer/>
+    </>
+    
   );
 }
 

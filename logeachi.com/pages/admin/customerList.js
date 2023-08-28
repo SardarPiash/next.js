@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Sidebar from "../components/sidebar";
 import { useRouter } from "next/router";
 import axios from "axios";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 function CustomerList() {
     const [customerInfo, setCustomerInfo] = useState([]);
@@ -31,6 +33,7 @@ function CustomerList() {
 
     return (
            <>
+           <Header/>
             <Sidebar />
             <div className="flex items-center justify-center bg-gray-100 min-h-screen">
             <div className="w-3/4 p-8 bg-white rounded shadow-md">
@@ -57,6 +60,7 @@ function CustomerList() {
                 )}
             </div>
         </div>
+        <Footer/>
         </>
     );
 }

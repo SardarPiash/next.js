@@ -3,6 +3,8 @@ import Sidebar from "../components/sidebar";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Header from "../components/header";
+import Footer from "../components/footer";
 
 function BlockedUser() {
   const { handleSubmit } = useForm();
@@ -50,6 +52,8 @@ function BlockedUser() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="bg-gray-100 min-h-screen">
       <Sidebar />
       <div className="flex items-center justify-center h-screen">
@@ -77,6 +81,8 @@ function BlockedUser() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 

@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Header from "../components/header";
+import Footer from "../components/footer";
 
 function ShowOrderList() {
   const { handleSubmit } = useForm();
@@ -44,6 +45,7 @@ function ShowOrderList() {
 
   return (
     <>
+    <Header/>
       <Sidebar />
       <div className="flex items-center justify-center bg-gray-100 min-h-screen">
         <div className="w-3/4 p-8 bg-white rounded shadow-md">
@@ -87,6 +89,7 @@ function ShowOrderList() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

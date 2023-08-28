@@ -3,6 +3,8 @@ import Sidebar from "../components/sidebar";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useRouter } from "next/router";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 function DeleteUser() {
   const { handleSubmit } = useForm();
@@ -37,7 +39,7 @@ function DeleteUser() {
       try {
         const response = await axios.delete(`http://localhost:3001/admin/delete/${name}`);
         console.log(response.data);
-        setFlag("User Deleted!");
+        setFlag(response.data);
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -50,6 +52,8 @@ function DeleteUser() {
   };
 
   return (
+    <>
+    <Header/>
     <div className="bg-gray-100 min-h-screen">
       <Sidebar />
       <div className="flex items-center justify-center h-screen">
@@ -77,6 +81,8 @@ function DeleteUser() {
         </div>
       </div>
     </div>
+    <Footer/>
+    </>
   );
 }
 
